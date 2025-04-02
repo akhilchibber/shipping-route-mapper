@@ -31,7 +31,7 @@ const ControlPanel = ({
   };
 
   return (
-    <div className={`fixed top-0 left-0 z-10 h-screen bg-sidebar transition-all duration-300 ease-in-out 
+    <div className={`fixed top-0 left-0 z-50 h-screen bg-sidebar transition-all duration-300 ease-in-out 
                     ${collapsed ? 'w-12' : 'w-80'} shadow-lg border-r border-sidebar-border`}>
       <div className="flex flex-col h-full p-4">
         <div className="flex justify-between items-center mb-6">

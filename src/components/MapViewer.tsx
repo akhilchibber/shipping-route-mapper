@@ -1,6 +1,6 @@
 
 import { useRef } from 'react';
-import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { RouteData, MapTileOption } from '@/types/RouteTypes';
 
@@ -44,20 +44,24 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
   };
 
   return (
-    <div className="h-screen w-full">
+    <div className="h-full w-full absolute inset-0 z-0">
       <MapContainer 
         className="h-full w-full"
-        zoom={3} 
+        center={[45, -30]} 
+        zoom={3}
         zoomControl={false}
-        center={[45, -30] as L.LatLngExpression}
+        style={{ height: '100%', width: '100%' }}
       >
-        <MapTileLayer selectedMapTile={selectedMapTile} />
+        <TileLayer
+          attribution={selectedMapTile.attribution}
+          url={selectedMapTile.url}
+        />
         
         {routes.filter(route => route.isVisible).map((route) => (
           <GeoJSON 
             key={route.id} 
-            data={route.geojsonData} 
-            style={() => routeStyle(route)}
+            data={route.geojsonData}
+            pathOptions={routeStyle(route)}
           />
         ))}
       </MapContainer>
