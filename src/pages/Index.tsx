@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import MapViewer from '@/components/MapViewer';
 import ControlPanel from '@/components/ControlPanel';
-import { initialRoutesState } from '@/data/routeData';
-import { RouteData } from '@/types/RouteTypes';
+import { initialRoutesState, mapTileOptions } from '@/data/routeData';
+import { RouteData, MapTileOption } from '@/types/RouteTypes';
 import { useToast } from '@/components/ui/use-toast';
 
 const Index = () => {
   const [routes, setRoutes] = useState<RouteData[]>(initialRoutesState);
+  const [selectedMapTile, setSelectedMapTile] = useState<MapTileOption>(mapTileOptions[0]);
   const { toast } = useToast();
 
   const handleRouteChange = (routeId: string, changes: Partial<RouteData>) => {
@@ -31,10 +32,27 @@ const Index = () => {
     setRoutes(updatedRoutes);
   };
 
+  const handleMapTileChange = (mapTileId: string) => {
+    const newMapTile = mapTileOptions.find(tile => tile.id === mapTileId);
+    if (newMapTile) {
+      setSelectedMapTile(newMapTile);
+      toast({
+        title: `Map changed to ${newMapTile.name}`,
+        duration: 2000,
+      });
+    }
+  };
+
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      <MapViewer routes={routes} />
-      <ControlPanel routes={routes} onRouteChange={handleRouteChange} />
+      <MapViewer routes={routes} selectedMapTile={selectedMapTile} />
+      <ControlPanel 
+        routes={routes} 
+        onRouteChange={handleRouteChange} 
+        mapTileOptions={mapTileOptions}
+        selectedMapTile={selectedMapTile}
+        onMapTileChange={handleMapTileChange}
+      />
     </div>
   );
 };

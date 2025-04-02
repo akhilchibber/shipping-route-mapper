@@ -1,67 +1,166 @@
 
+import { FeatureCollection } from "geojson";
+
 // GeoJSON data for shipping routes
-export const directRouteGeoJSON = {
-  "type": "Feature",
-  "properties": {
-    "name": "Direct Route",
-    "description": "Direct route crossing the North Atlantic"
-  },
-  "geometry": {
-    "type": "LineString",
-    "coordinates": [
-      [-4.142, 50.371], // Plymouth, UK
-      [-71.05, 42.36]   // Boston, USA
-    ]
-  }
+export const directRouteGeoJSON: FeatureCollection = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "voyageId": "V_DIRECT_001",
+        "vesselId": "HTV_Triumph",
+        "departurePort": "Rotterdam",
+        "arrivalPort": "Sheet Harbour",
+        "departureTimestamp": "2024-07-01T08:00:00Z",
+        "arrivalTimestamp": "2024-07-12T14:00:00Z"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [4.10, 51.90],
+          [-1.00, 50.50],
+          [-8.50, 49.80],
+          [-18.00, 49.50],
+          [-28.00, 49.00],
+          [-38.00, 48.50],
+          [-48.00, 47.80],
+          [-55.00, 47.00],
+          [-60.00, 45.80],
+          [-62.00, 45.10],
+          [-62.50, 44.90]
+        ]
+      }
+    }
+  ]
 };
 
-export const azoresRouteGeoJSON = {
-  "type": "Feature",
-  "properties": {
-    "name": "Azores Route",
-    "description": "Route passing through the Azores"
-  },
-  "geometry": {
-    "type": "LineString",
-    "coordinates": [
-      [-4.142, 50.371],  // Plymouth, UK
-      [-25.667, 37.741], // Azores
-      [-71.05, 42.36]    // Boston, USA
-    ]
-  }
+export const azoresRouteGeoJSON: FeatureCollection = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "voyageId": "V_CANARIES_001",
+        "vesselId": "HTV_Triumph",
+        "departurePort": "Rotterdam",
+        "arrivalPort": "Sheet Harbour",
+        "departureTimestamp": "2024-08-01T08:00:00Z",
+        "arrivalTimestamp": "2024-08-16T10:00:00Z"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [4.10, 51.90],
+          [-2.00, 50.00],
+          [-7.50, 46.50],
+          [-11.00, 43.00],
+          [-14.00, 38.50],
+          [-18.00, 33.00],
+          [-22.00, 28.50],
+          [-32.00, 29.50],
+          [-42.00, 32.00],
+          [-52.00, 36.00],
+          [-60.00, 40.50],
+          [-62.80, 44.50],
+          [-62.50, 44.90]
+        ]
+      }
+    }
+  ]
 };
 
-export const moreDirectAzoresRouteGeoJSON = {
-  "type": "Feature",
-  "properties": {
-    "name": "More Direct Azores Route",
-    "description": "More direct route near the Azores"
-  },
-  "geometry": {
-    "type": "LineString",
-    "coordinates": [
-      [-4.142, 50.371],  // Plymouth, UK
-      [-28.0, 39.0],     // North of Azores
-      [-71.05, 42.36]    // Boston, USA
-    ]
-  }
+export const moreDirectAzoresRouteGeoJSON: FeatureCollection = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "voyageId": "V_AZORES_001",
+        "vesselId": "HTV_Triumph",
+        "departurePort": "Rotterdam",
+        "arrivalPort": "Sheet Harbour",
+        "departureTimestamp": "2024-07-15T08:00:00Z",
+        "arrivalTimestamp": "2024-07-28T22:00:00Z"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [4.10, 51.90],
+          [-1.50, 50.20],
+          [-8.00, 47.50],
+          [-15.00, 44.50],
+          [-22.00, 40.50],
+          [-29.00, 38.00],
+          [-38.00, 38.50],
+          [-47.00, 39.80],
+          [-55.00, 41.50],
+          [-60.00, 43.50],
+          [-62.00, 44.70],
+          [-62.50, 44.90]
+        ]
+      }
+    }
+  ]
 };
 
-export const canariesRouteGeoJSON = {
-  "type": "Feature",
-  "properties": {
-    "name": "Canaries Route",
-    "description": "Southern route via the Canary Islands"
-  },
-  "geometry": {
-    "type": "LineString",
-    "coordinates": [
-      [-4.142, 50.371],   // Plymouth, UK
-      [-15.4, 28.0],      // Canary Islands
-      [-71.05, 42.36]     // Boston, USA
-    ]
-  }
+export const canariesRouteGeoJSON: FeatureCollection = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "voyageId": "V_CANARIES_001",
+        "vesselId": "HTV_Triumph",
+        "departurePort": "Rotterdam",
+        "arrivalPort": "Sheet Harbour",
+        "departureTimestamp": "2024-09-01T08:00:00Z",
+        "arrivalTimestamp": "2024-09-18T12:00:00Z"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [4.10, 51.90],
+          [-1.80, 50.10],
+          [-8.50, 47.00],
+          [-11.00, 42.00],
+          [-12.50, 37.00],
+          [-16.00, 31.00],
+          [-20.00, 29.00],
+          [-30.00, 30.00],
+          [-40.00, 31.50],
+          [-50.00, 33.50],
+          [-60.00, 37.00],
+          [-64.00, 41.50],
+          [-63.00, 44.00],
+          [-62.50, 44.90]
+        ]
+      }
+    }
+  ]
 };
+
+// Available map tile options
+export const mapTileOptions = [
+  {
+    id: 'osm',
+    name: 'OpenStreetMap',
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  },
+  {
+    id: 'carto',
+    name: 'CartoDB Positron',
+    url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  },
+  {
+    id: 'satellite',
+    name: 'ESRI World Imagery',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+  },
+];
 
 export const initialRoutesState = [
   { 

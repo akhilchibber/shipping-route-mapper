@@ -1,8 +1,8 @@
 
-import { useEffect } from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { useRef } from 'react';
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { RouteData } from '@/types/RouteTypes';
+import { RouteData, MapTileOption } from '@/types/RouteTypes';
 
 // Fix Leaflet icon issue
 import L from 'leaflet';
@@ -18,11 +18,22 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-interface MapViewerProps {
-  routes: RouteData[];
+// This component handles the map tile change
+function MapTileLayer({ selectedMapTile }: { selectedMapTile: MapTileOption }) {
+  return (
+    <TileLayer
+      attribution={selectedMapTile.attribution}
+      url={selectedMapTile.url}
+    />
+  );
 }
 
-const MapViewer = ({ routes }: MapViewerProps) => {
+interface MapViewerProps {
+  routes: RouteData[];
+  selectedMapTile: MapTileOption;
+}
+
+const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
   // Function to style routes based on their properties
   const routeStyle = (route: RouteData) => {
     return {
@@ -35,21 +46,18 @@ const MapViewer = ({ routes }: MapViewerProps) => {
   return (
     <div className="h-screen w-full">
       <MapContainer 
-        center={[45, -30]} 
+        className="h-full w-full"
         zoom={3} 
-        style={{ height: '100%', width: '100%' }}
         zoomControl={false}
+        center={[45, -30] as L.LatLngExpression}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <MapTileLayer selectedMapTile={selectedMapTile} />
         
         {routes.filter(route => route.isVisible).map((route) => (
           <GeoJSON 
             key={route.id} 
             data={route.geojsonData} 
-            pathOptions={routeStyle(route)}
+            style={() => routeStyle(route)}
           />
         ))}
       </MapContainer>

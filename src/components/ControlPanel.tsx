@@ -1,18 +1,29 @@
 
 import { useState } from 'react';
-import { RouteData } from '@/types/RouteTypes';
+import { RouteData, MapTileOption } from '@/types/RouteTypes';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ControlPanelProps {
   routes: RouteData[];
   onRouteChange: (routeId: string, changes: Partial<RouteData>) => void;
+  mapTileOptions: MapTileOption[];
+  selectedMapTile: MapTileOption;
+  onMapTileChange: (mapTileId: string) => void;
 }
 
-const ControlPanel = ({ routes, onRouteChange }: ControlPanelProps) => {
+const ControlPanel = ({ 
+  routes, 
+  onRouteChange, 
+  mapTileOptions,
+  selectedMapTile,
+  onMapTileChange
+}: ControlPanelProps) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const toggleCollapse = () => {
@@ -38,59 +49,87 @@ const ControlPanel = ({ routes, onRouteChange }: ControlPanelProps) => {
         </div>
 
         {!collapsed && (
-          <div className="space-y-6 overflow-auto flex-grow">
-            {routes.map((route) => (
-              <div key={route.id} className="space-y-3 pb-4 border-b border-sidebar-border">
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={`visibility-${route.id}`}
-                    checked={route.isVisible}
-                    onCheckedChange={(checked) => 
-                      onRouteChange(route.id, { isVisible: !!checked })
-                    }
-                  />
-                  <label 
-                    htmlFor={`visibility-${route.id}`}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    {route.name}
-                  </label>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs text-muted-foreground">Color</label>
+          <Tabs defaultValue="routes" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="routes">Planned Routes</TabsTrigger>
+              <TabsTrigger value="map">Map Options</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="routes" className="space-y-6 overflow-auto max-h-[calc(100vh-160px)]">
+              {routes.map((route) => (
+                <div key={route.id} className="space-y-3 pb-4 border-b border-sidebar-border">
                   <div className="flex items-center space-x-2">
-                    <Input
-                      type="color"
-                      value={route.color}
-                      onChange={(e) => onRouteChange(route.id, { color: e.target.value })}
-                      className="w-12 h-8 p-1"
+                    <Checkbox 
+                      id={`visibility-${route.id}`}
+                      checked={route.isVisible}
+                      onCheckedChange={(checked) => 
+                        onRouteChange(route.id, { isVisible: !!checked })
+                      }
                     />
-                    <Input
-                      type="text"
-                      value={route.color}
-                      onChange={(e) => onRouteChange(route.id, { color: e.target.value })}
-                      className="w-24 h-8"
-                    />
+                    <label 
+                      htmlFor={`visibility-${route.id}`}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {route.name}
+                    </label>
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <label className="text-xs text-muted-foreground">Line Width</label>
-                    <span className="text-xs text-muted-foreground">{route.weight}px</span>
+                  <div className="space-y-2">
+                    <label className="text-xs text-muted-foreground">Color</label>
+                    <div className="flex items-center space-x-2">
+                      <Input
+                        type="color"
+                        value={route.color}
+                        onChange={(e) => onRouteChange(route.id, { color: e.target.value })}
+                        className="w-12 h-8 p-1"
+                      />
+                      <Input
+                        type="text"
+                        value={route.color}
+                        onChange={(e) => onRouteChange(route.id, { color: e.target.value })}
+                        className="w-24 h-8"
+                      />
+                    </div>
                   </div>
-                  <Slider 
-                    value={[route.weight]} 
-                    min={1} 
-                    max={10} 
-                    step={1}
-                    onValueChange={(value) => onRouteChange(route.id, { weight: value[0] })}
-                  />
+
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <label className="text-xs text-muted-foreground">Line Width</label>
+                      <span className="text-xs text-muted-foreground">{route.weight}px</span>
+                    </div>
+                    <Slider 
+                      value={[route.weight]} 
+                      min={1} 
+                      max={10} 
+                      step={1}
+                      onValueChange={(value) => onRouteChange(route.id, { weight: value[0] })}
+                    />
+                  </div>
                 </div>
+              ))}
+            </TabsContent>
+            
+            <TabsContent value="map" className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Map Style</label>
+                <Select
+                  value={selectedMapTile.id}
+                  onValueChange={onMapTileChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a map style" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {mapTileOptions.map((tile) => (
+                      <SelectItem key={tile.id} value={tile.id}>
+                        {tile.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-            ))}
-          </div>
+            </TabsContent>
+          </Tabs>
         )}
       </div>
     </div>
