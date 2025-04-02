@@ -1,6 +1,6 @@
 
 import { useRef } from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { RouteData, MapTileOption } from '@/types/RouteTypes';
 
@@ -17,6 +17,19 @@ let DefaultIcon = L.icon({
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
+
+// Define the start and end locations
+const startLocation = {
+  name: "Rotterdam, Netherlands",
+  position: [51.90, 4.10],
+  icon: DefaultIcon
+};
+
+const endLocation = {
+  name: "Sheet Harbour, Canada",
+  position: [44.90, -62.50],
+  icon: DefaultIcon
+};
 
 // This component handles the map tile change
 function MapTileLayer({ selectedMapTile }: { selectedMapTile: MapTileOption }) {
@@ -47,7 +60,7 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
     <div className="h-full w-full absolute inset-0 z-0">
       <MapContainer 
         className="h-full w-full"
-        center={[45, -30]} 
+        center={[45, -30] as L.LatLngExpression} 
         zoom={3}
         zoomControl={false}
         style={{ height: '100%', width: '100%' }}
@@ -64,6 +77,25 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
             pathOptions={routeStyle(route)}
           />
         ))}
+
+        {/* Add markers for start and end locations */}
+        <Marker position={startLocation.position as L.LatLngExpression}>
+          <Popup>
+            <div className="text-center">
+              <strong>{startLocation.name}</strong>
+              <p>Starting Point</p>
+            </div>
+          </Popup>
+        </Marker>
+        
+        <Marker position={endLocation.position as L.LatLngExpression}>
+          <Popup>
+            <div className="text-center">
+              <strong>{endLocation.name}</strong>
+              <p>Destination</p>
+            </div>
+          </Popup>
+        </Marker>
       </MapContainer>
     </div>
   );
