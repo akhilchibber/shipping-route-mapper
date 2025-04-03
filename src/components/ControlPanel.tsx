@@ -71,10 +71,10 @@ const ControlPanel = ({
 
         {!collapsed && (
           <Tabs defaultValue="planned" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="planned">Planned Routes</TabsTrigger>
-              <TabsTrigger value="alternative">Alternative Routes</TabsTrigger>
-              <TabsTrigger value="grids">GWS Grids</TabsTrigger>
+            <TabsList className="w-full grid grid-cols-3 mb-4">
+              <TabsTrigger value="planned" className="text-xs px-2 py-1.5">Planned Routes</TabsTrigger>
+              <TabsTrigger value="alternative" className="text-xs px-2 py-1.5">Alternative Routes</TabsTrigger>
+              <TabsTrigger value="grids" className="text-xs px-2 py-1.5">GWS Grids</TabsTrigger>
             </TabsList>
             
             <TabsContent value="planned" className="space-y-6 overflow-auto max-h-[calc(100vh-160px)]">
