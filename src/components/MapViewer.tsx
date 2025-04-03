@@ -1,9 +1,10 @@
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { MapContainer, TileLayer, GeoJSON, Marker, Popup, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { RouteData, MapTileOption } from '@/types/RouteTypes';
+import { RouteData, MapTileOption, GridData } from '@/types/RouteTypes';
 import { Flag } from 'lucide-react';
+import { MapLegend } from '@/components/MapLegend';
 
 // Fix Leaflet icon issue
 import L from 'leaflet';
@@ -55,10 +56,37 @@ const endLocation = {
 
 interface MapViewerProps {
   routes: RouteData[];
+  grids?: GridData;
   selectedMapTile: MapTileOption;
+  activeGrids?: boolean;
+  gridStyle?: {
+    color: string;
+    weight: number;
+    opacity: number;
+    fill: boolean;
+    fillColor: string;
+    fillOpacity: number;
+    showLabels: boolean;
+  };
 }
 
-const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
+const MapViewer = ({ 
+  routes, 
+  grids, 
+  selectedMapTile, 
+  activeGrids = false,
+  gridStyle = { 
+    color: '#3388ff', 
+    weight: 2, 
+    opacity: 1, 
+    fill: false, 
+    fillColor: '#3388ff', 
+    fillOpacity: 0.2,
+    showLabels: false
+  } 
+}: MapViewerProps) => {
+  const mapRef = useRef<L.Map | null>(null);
+  
   // Function to style routes based on their properties
   const routeStyle = (route: RouteData) => {
     return {
@@ -68,11 +96,66 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
       dashArray: route.dashStyle
     };
   };
+  
+  // Function to style grids
+  const gridStyleFunction = () => {
+    return {
+      color: gridStyle.color,
+      weight: gridStyle.weight,
+      opacity: gridStyle.opacity,
+      fill: gridStyle.fill,
+      fillColor: gridStyle.fillColor,
+      fillOpacity: gridStyle.fillOpacity
+    };
+  };
+
+  // Center map on routes when component mounts
+  useEffect(() => {
+    if (mapRef.current) {
+      // Calculate bounds of all routes
+      const bounds = L.latLngBounds([]);
+      
+      // Add start and end points to bounds
+      bounds.extend(startLocation.position);
+      bounds.extend(endLocation.position);
+      
+      // Add route points to bounds
+      routes.forEach(route => {
+        if (route.isVisible && route.geojsonData.type === 'FeatureCollection') {
+          route.geojsonData.features.forEach(feature => {
+            if (feature.geometry.type === 'LineString') {
+              feature.geometry.coordinates.forEach(coord => {
+                bounds.extend([coord[1], coord[0]] as L.LatLngExpression);
+              });
+            }
+          });
+        }
+      });
+      
+      // Fit map to bounds with padding
+      mapRef.current.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, []);
+  
+  // Function to render grid labels if enabled
+  const onEachGridFeature = (feature: any, layer: L.Layer) => {
+    if (gridStyle.showLabels && feature.properties) {
+      const centerLon = feature.properties.center_lon;
+      const centerLat = feature.properties.center_lat;
+      
+      layer.bindTooltip(`${centerLon.toFixed(1)}, ${centerLat.toFixed(1)}`, {
+        permanent: true,
+        direction: 'center',
+        className: 'grid-label'
+      });
+    }
+  };
 
   return (
     <div className="h-full w-full absolute inset-0 z-0">
       <MapContainer 
-        center={[45, -30] as L.LatLngExpression} 
+        ref={mapRef}
+        center={[45, -30]} 
         zoom={3}
         zoomControl={false}
         className="h-full w-full"
@@ -90,11 +173,19 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
             pathOptions={routeStyle(route)}
           />
         ))}
+        
+        {activeGrids && grids && (
+          <GeoJSON 
+            data={grids}
+            style={gridStyleFunction}
+            onEachFeature={onEachGridFeature}
+          />
+        )}
 
         {/* Add markers for start and end locations */}
         <Marker 
-          position={startLocation.position} 
-          icon={startLocation.icon as L.DivIcon}
+          position={startLocation.position}
+          icon={StartIcon}
         >
           <Popup>
             <div className="text-center">
@@ -105,8 +196,8 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
         </Marker>
         
         <Marker 
-          position={endLocation.position} 
-          icon={endLocation.icon as L.DivIcon}
+          position={endLocation.position}
+          icon={EndIcon}
         >
           <Popup>
             <div className="text-center">
@@ -115,6 +206,9 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
             </div>
           </Popup>
         </Marker>
+
+        {/* Add legend to the map */}
+        <MapLegend routes={routes} />
 
         {/* Move zoom controls to the top right */}
         <ZoomControl position="topright" />

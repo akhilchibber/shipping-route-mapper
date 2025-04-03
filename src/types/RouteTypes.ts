@@ -9,7 +9,7 @@ export interface RouteData {
   color: string;
   weight: number;
   dashStyle: string;
-  routeType: 'planned' | 'alternative';
+  routeType: 'planned' | 'alternative' | 'grid';
 }
 
 export interface MapTileOption {
@@ -18,4 +18,16 @@ export interface MapTileOption {
   url: string;
   attribution: string;
   thumbnail?: string;
+}
+
+export type GridData = FeatureCollection;
+
+export interface GridStyle {
+  color: string;
+  weight: number;
+  opacity: number;
+  fill: boolean;
+  fillColor: string;
+  fillOpacity: number;
+  showLabels: boolean;
 }

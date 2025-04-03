@@ -1,0 +1,11 @@
+
+/* Custom styles for the grid labels */
+.grid-label {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 9px;
+  text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 3px #fff;
+}

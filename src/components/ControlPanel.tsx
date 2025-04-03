@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { RouteData, MapTileOption } from '@/types/RouteTypes';
+import { RouteData, MapTileOption, GridStyle } from '@/types/RouteTypes';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
@@ -8,6 +9,7 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { dashStyles } from '@/data/routeData';
+import { initialGridStyle } from '@/data/gwsGrids';
 
 interface ControlPanelProps {
   routes: RouteData[];
@@ -15,6 +17,10 @@ interface ControlPanelProps {
   mapTileOptions: MapTileOption[];
   selectedMapTile: MapTileOption;
   onMapTileChange: (mapTileId: string) => void;
+  showGrids?: boolean;
+  onToggleGrids?: (show: boolean) => void;
+  gridStyle?: GridStyle;
+  onGridStyleChange?: (style: Partial<GridStyle>) => void;
 }
 
 const ControlPanel = ({ 
@@ -22,7 +28,11 @@ const ControlPanel = ({
   onRouteChange, 
   mapTileOptions,
   selectedMapTile,
-  onMapTileChange
+  onMapTileChange,
+  showGrids = false,
+  onToggleGrids = () => {},
+  gridStyle = initialGridStyle,
+  onGridStyleChange = () => {}
 }: ControlPanelProps) => {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -42,7 +52,7 @@ const ControlPanel = ({
           {!collapsed && (
             <div className="flex items-center gap-2">
               <img 
-                src="/lovable-uploads/0188a53c-4729-49f1-8898-68eb1fc79cd3.png" 
+                src="/lovable-uploads/120c325f-eeff-46c9-9061-516848f238ff.png" 
                 alt="Boskalis Logo" 
                 className="h-8" 
               />
@@ -61,9 +71,10 @@ const ControlPanel = ({
 
         {!collapsed && (
           <Tabs defaultValue="planned" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="planned">Planned Routes</TabsTrigger>
               <TabsTrigger value="alternative">Alternative Routes</TabsTrigger>
+              <TabsTrigger value="grids">GWS Grids</TabsTrigger>
             </TabsList>
             
             <TabsContent value="planned" className="space-y-6 overflow-auto max-h-[calc(100vh-160px)]">
@@ -76,6 +87,117 @@ const ControlPanel = ({
               {alternativeRoutes.map((route) => (
                 <RouteCard key={route.id} route={route} onRouteChange={onRouteChange} />
               ))}
+            </TabsContent>
+            
+            <TabsContent value="grids" className="space-y-6 overflow-auto max-h-[calc(100vh-160px)]">
+              <div className="space-y-4 pb-4 border-b border-sidebar-border">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="grid-visibility"
+                    checked={showGrids}
+                    onCheckedChange={(checked) => onToggleGrids(!!checked)}
+                  />
+                  <label htmlFor="grid-visibility" className="text-sm font-medium">
+                    Show GWS Grids
+                  </label>
+                </div>
+                
+                {showGrids && (
+                  <>
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground">Border Color</label>
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          type="color"
+                          value={gridStyle.color}
+                          onChange={(e) => onGridStyleChange({ color: e.target.value })}
+                          className="w-12 h-8 p-1"
+                        />
+                        <Input
+                          type="text"
+                          value={gridStyle.color}
+                          onChange={(e) => onGridStyleChange({ color: e.target.value })}
+                          className="w-24 h-8"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <label className="text-xs text-muted-foreground">Border Width</label>
+                        <span className="text-xs text-muted-foreground">{gridStyle.weight}px</span>
+                      </div>
+                      <Slider 
+                        value={[gridStyle.weight]} 
+                        min={1} 
+                        max={5} 
+                        step={0.5}
+                        onValueChange={(value) => onGridStyleChange({ weight: value[0] })}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2 pt-2">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox 
+                          id="grid-fill"
+                          checked={gridStyle.fill}
+                          onCheckedChange={(checked) => onGridStyleChange({ fill: !!checked })}
+                        />
+                        <label htmlFor="grid-fill" className="text-xs text-muted-foreground">
+                          Fill Grid Cells
+                        </label>
+                      </div>
+                      
+                      {gridStyle.fill && (
+                        <div className="pt-2 space-y-2">
+                          <label className="text-xs text-muted-foreground">Fill Color</label>
+                          <div className="flex items-center space-x-2">
+                            <Input
+                              type="color"
+                              value={gridStyle.fillColor}
+                              onChange={(e) => onGridStyleChange({ fillColor: e.target.value })}
+                              className="w-12 h-8 p-1"
+                            />
+                            <Input
+                              type="text"
+                              value={gridStyle.fillColor}
+                              onChange={(e) => onGridStyleChange({ fillColor: e.target.value })}
+                              className="w-24 h-8"
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <div className="flex justify-between">
+                              <label className="text-xs text-muted-foreground">Fill Opacity</label>
+                              <span className="text-xs text-muted-foreground">{gridStyle.fillOpacity.toFixed(1)}</span>
+                            </div>
+                            <Slider 
+                              value={[gridStyle.fillOpacity * 10]} 
+                              min={1} 
+                              max={10} 
+                              step={1}
+                              onValueChange={(value) => onGridStyleChange({ fillOpacity: value[0] / 10 })}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-2 pt-2">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox 
+                          id="grid-labels"
+                          checked={gridStyle.showLabels}
+                          onCheckedChange={(checked) => onGridStyleChange({ showLabels: !!checked })}
+                        />
+                        <label htmlFor="grid-labels" className="text-xs text-muted-foreground">
+                          Show Grid Labels
+                        </label>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             </TabsContent>
           </Tabs>
         )}
