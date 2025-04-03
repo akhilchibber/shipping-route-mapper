@@ -43,7 +43,7 @@ const ControlPanel = ({
           {!collapsed && (
             <div className="flex items-center">
               <img 
-                src="/boskalis-logo.png" 
+                src="/lovable-uploads/0188a53c-4729-49f1-8898-68eb1fc79cd3.png" 
                 alt="Boskalis Logo" 
                 className="h-8 mr-2" 
               />

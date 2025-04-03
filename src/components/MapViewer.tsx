@@ -73,7 +73,7 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
     <div className="h-full w-full absolute inset-0 z-0">
       <MapContainer 
         className="h-full w-full"
-        center={[45, -30] as L.LatLngExpression} 
+        center={[45, -30]} 
         zoom={3}
         zoomControl={false}
         style={{ height: '100%', width: '100%' }}
@@ -92,7 +92,10 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
         ))}
 
         {/* Add markers for start and end locations */}
-        <Marker position={startLocation.position} icon={startLocation.icon}>
+        <Marker 
+          position={startLocation.position} 
+          icon={startLocation.icon as L.DivIcon}
+        >
           <Popup>
             <div className="text-center">
               <strong>{startLocation.name}</strong>
@@ -101,7 +104,10 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
           </Popup>
         </Marker>
         
-        <Marker position={endLocation.position} icon={endLocation.icon}>
+        <Marker 
+          position={endLocation.position} 
+          icon={endLocation.icon as L.DivIcon}
+        >
           <Popup>
             <div className="text-center">
               <strong>{endLocation.name}</strong>
