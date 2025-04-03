@@ -1,8 +1,9 @@
 
 import { useRef } from 'react';
-import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Marker, Popup, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { RouteData, MapTileOption } from '@/types/RouteTypes';
+import { Flag } from 'lucide-react';
 
 // Fix Leaflet icon issue
 import L from 'leaflet';
@@ -16,30 +17,41 @@ let DefaultIcon = L.icon({
   iconAnchor: [12, 41]
 });
 
-L.Marker.prototype.options.icon = DefaultIcon;
+// Create custom icons for start and end locations
+const StartIcon = L.divIcon({
+  className: 'custom-icon',
+  html: `
+    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 border-2 border-white shadow-lg">
+      <div class="w-4 h-4 bg-white rounded-full"></div>
+    </div>
+  `,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+});
+
+const EndIcon = L.divIcon({
+  className: 'custom-icon',
+  html: `
+    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-red-600 border-2 border-white shadow-lg">
+      <div class="w-4 h-4 bg-white rounded-full"></div>
+    </div>
+  `,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16],
+});
 
 // Define the start and end locations
 const startLocation = {
   name: "Rotterdam, Netherlands",
-  position: [51.90, 4.10],
-  icon: DefaultIcon
+  position: [51.90, 4.10] as L.LatLngExpression,
+  icon: StartIcon
 };
 
 const endLocation = {
   name: "Sheet Harbour, Canada",
-  position: [44.90, -62.50],
-  icon: DefaultIcon
+  position: [44.90, -62.50] as L.LatLngExpression,
+  icon: EndIcon
 };
-
-// This component handles the map tile change
-function MapTileLayer({ selectedMapTile }: { selectedMapTile: MapTileOption }) {
-  return (
-    <TileLayer
-      attribution={selectedMapTile.attribution}
-      url={selectedMapTile.url}
-    />
-  );
-}
 
 interface MapViewerProps {
   routes: RouteData[];
@@ -52,7 +64,8 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
     return {
       color: route.color,
       weight: route.weight,
-      opacity: 1
+      opacity: 1,
+      dashArray: route.dashStyle
     };
   };
 
@@ -79,23 +92,26 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
         ))}
 
         {/* Add markers for start and end locations */}
-        <Marker position={startLocation.position as L.LatLngExpression}>
+        <Marker position={startLocation.position} icon={startLocation.icon}>
           <Popup>
             <div className="text-center">
               <strong>{startLocation.name}</strong>
-              <p>Starting Point</p>
+              <p className="text-blue-600 font-medium">Starting Point</p>
             </div>
           </Popup>
         </Marker>
         
-        <Marker position={endLocation.position as L.LatLngExpression}>
+        <Marker position={endLocation.position} icon={endLocation.icon}>
           <Popup>
             <div className="text-center">
               <strong>{endLocation.name}</strong>
-              <p>Destination</p>
+              <p className="text-red-600 font-medium">Destination</p>
             </div>
           </Popup>
         </Marker>
+
+        {/* Add zoom controls */}
+        <ZoomControl position="bottomright" />
       </MapContainer>
     </div>
   );

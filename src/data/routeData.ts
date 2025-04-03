@@ -146,20 +146,38 @@ export const mapTileOptions = [
     id: 'osm',
     name: 'OpenStreetMap',
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    thumbnail: 'https://{s}.tile.openstreetmap.org/3/4/2.png'
   },
   {
     id: 'carto',
     name: 'CartoDB Positron',
     url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    thumbnail: 'https://a.basemaps.cartocdn.com/light_all/3/4/2.png'
   },
   {
     id: 'satellite',
     name: 'ESRI World Imagery',
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    thumbnail: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/3/2/4'
   },
+  {
+    id: 'dark',
+    name: 'CartoDB Dark',
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    thumbnail: 'https://a.basemaps.cartocdn.com/dark_all/3/4/2.png'
+  }
+];
+
+// Dash styles for routes
+export const dashStyles = [
+  { id: 'solid', name: 'Solid', pattern: '' },
+  { id: 'dashed', name: 'Dashed', pattern: '8, 8' },
+  { id: 'dotted', name: 'Dotted', pattern: '2, 8' },
+  { id: 'dashdot', name: 'Dash-Dot', pattern: '10, 5, 2, 5' }
 ];
 
 export const initialRoutesState = [
@@ -168,31 +186,39 @@ export const initialRoutesState = [
     name: 'Direct Route', 
     geojsonData: directRouteGeoJSON, 
     isVisible: true, 
-    color: '#F97316', 
-    weight: 3 
+    color: '#FF0000', 
+    weight: 3,
+    dashStyle: '',
+    routeType: 'alternative'
   },
   { 
     id: 'azores', 
     name: 'Azores Route', 
     geojsonData: azoresRouteGeoJSON, 
     isVisible: true, 
-    color: '#0EA5E9', 
-    weight: 3 
+    color: '#FF0000', 
+    weight: 3,
+    dashStyle: '',
+    routeType: 'alternative'
   },
   { 
     id: 'moreDirectAzores', 
-    name: 'More Direct Azores', 
+    name: 'More Direct Azores Route', 
     geojsonData: moreDirectAzoresRouteGeoJSON, 
     isVisible: true, 
-    color: '#22C55E', 
-    weight: 3 
+    color: '#000000', 
+    weight: 3,
+    dashStyle: '',
+    routeType: 'planned'
   },
   { 
     id: 'canaries', 
     name: 'Canaries Route', 
     geojsonData: canariesRouteGeoJSON, 
     isVisible: true, 
-    color: '#A855F7', 
-    weight: 3 
+    color: '#FF0000', 
+    weight: 3,
+    dashStyle: '',
+    routeType: 'alternative' 
   },
 ];

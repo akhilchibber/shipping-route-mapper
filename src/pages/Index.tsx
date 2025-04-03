@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import MapViewer from '@/components/MapViewer';
 import ControlPanel from '@/components/ControlPanel';
+import MapLayerSelector from '@/components/MapLayerSelector';
 import { initialRoutesState, mapTileOptions } from '@/data/routeData';
 import { RouteData, MapTileOption } from '@/types/RouteTypes';
 import { useToast } from '@/components/ui/use-toast';
@@ -19,7 +20,7 @@ const Index = () => {
         // Show notification for visibility changes
         if (changes.isVisible !== undefined) {
           toast({
-            title: `${route.name} ${changes.isVisible ? 'Visible' : 'Hidden'}`,
+            title: `${route.id === 'moreDirectAzores' ? 'More Direct Aggre Route' : route.name} ${changes.isVisible ? 'Visible' : 'Hidden'}`,
             duration: 2000,
           });
         }
@@ -50,6 +51,10 @@ const Index = () => {
         routes={routes} 
         onRouteChange={handleRouteChange} 
         mapTileOptions={mapTileOptions}
+        selectedMapTile={selectedMapTile}
+        onMapTileChange={handleMapTileChange}
+      />
+      <MapLayerSelector 
         selectedMapTile={selectedMapTile}
         onMapTileChange={handleMapTileChange}
       />

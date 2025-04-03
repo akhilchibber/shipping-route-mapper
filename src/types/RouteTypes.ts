@@ -8,6 +8,8 @@ export interface RouteData {
   isVisible: boolean;
   color: string;
   weight: number;
+  dashStyle: string;
+  routeType: 'planned' | 'alternative';
 }
 
 export interface MapTileOption {
@@ -15,4 +17,5 @@ export interface MapTileOption {
   name: string;
   url: string;
   attribution: string;
+  thumbnail?: string;
 }
