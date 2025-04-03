@@ -72,10 +72,10 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
   return (
     <div className="h-full w-full absolute inset-0 z-0">
       <MapContainer 
-        className="h-full w-full"
-        center={[45, -30]} 
+        center={[45, -30] as L.LatLngExpression} 
         zoom={3}
         zoomControl={false}
+        className="h-full w-full"
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
@@ -116,8 +116,8 @@ const MapViewer = ({ routes, selectedMapTile }: MapViewerProps) => {
           </Popup>
         </Marker>
 
-        {/* Add zoom controls */}
-        <ZoomControl position="bottomright" />
+        {/* Move zoom controls to the top right */}
+        <ZoomControl position="topright" />
       </MapContainer>
     </div>
   );

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { RouteData, MapTileOption } from '@/types/RouteTypes';
 import { Button } from '@/components/ui/button';
@@ -41,13 +40,13 @@ const ControlPanel = ({
       <div className="flex flex-col h-full p-4">
         <div className="flex justify-between items-center mb-6">
           {!collapsed && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <img 
                 src="/lovable-uploads/0188a53c-4729-49f1-8898-68eb1fc79cd3.png" 
                 alt="Boskalis Logo" 
-                className="h-8 mr-2" 
+                className="h-8" 
               />
-              <h1 className="text-xl font-bold text-sidebar-foreground">Route Overview</h1>
+              <h1 className="text-xl font-semibold text-primary">Route Overview</h1>
             </div>
           )}
           <Button 

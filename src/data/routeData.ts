@@ -1,4 +1,3 @@
-
 import { FeatureCollection } from "geojson";
 
 // GeoJSON data for shipping routes
@@ -188,7 +187,7 @@ export const initialRoutesState = [
     isVisible: true, 
     color: '#FF0000', 
     weight: 3,
-    dashStyle: '',
+    dashStyle: '2, 8', // Set to dotted by default
     routeType: 'alternative'
   },
   { 
@@ -198,17 +197,17 @@ export const initialRoutesState = [
     isVisible: true, 
     color: '#FF0000', 
     weight: 3,
-    dashStyle: '',
+    dashStyle: '2, 8', // Set to dotted by default
     routeType: 'alternative'
   },
   { 
     id: 'moreDirectAzores', 
-    name: 'More Direct Azores Route', 
+    name: 'More Direct Aggre Route', 
     geojsonData: moreDirectAzoresRouteGeoJSON, 
     isVisible: true, 
     color: '#000000', 
     weight: 3,
-    dashStyle: '',
+    dashStyle: '2, 8', // Set to dotted by default
     routeType: 'planned'
   },
   { 
@@ -218,7 +217,7 @@ export const initialRoutesState = [
     isVisible: true, 
     color: '#FF0000', 
     weight: 3,
-    dashStyle: '',
+    dashStyle: '2, 8', // Set to dotted by default
     routeType: 'alternative' 
   },
 ];
